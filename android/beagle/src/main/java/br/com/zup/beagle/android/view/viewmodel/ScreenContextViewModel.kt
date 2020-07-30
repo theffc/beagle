@@ -82,6 +82,10 @@ internal class ScreenContextViewModel(
         contextDataManager.evaluateContexts()
     }
 
+    fun evaluateContexts(){
+        contextDataManager.evaluateContexts()
+    }
+
     fun notifyBindingChanges(contextBinding: ContextBinding) {
         contextDataManager.notifyBindingChanges(contextBinding)
     }

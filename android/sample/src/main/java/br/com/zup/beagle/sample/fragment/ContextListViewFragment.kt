@@ -76,13 +76,19 @@ class ContextListViewFragment : Fragment() {
             )
         ),
         dataSource = expressionOf("@{initialContext}"),
-        direction = ListDirection.VERTICAL,
+        direction = ListDirection.HORIZONTAL,
         template = Text(text = expressionOf("@{item.name}")),
         onScrollEnd = SendRequest(
             url = "https://api.themoviedb.org/3/genre/movie/list?api_key=d272326e467344029e68e3c4ff0b4059",
-            method = RequestActionMethod.GET
+            method = RequestActionMethod.GET,
+            onSuccess = listOf(
+                SetContext(
+                    contextId = "initialContext",
+                    value = "@{onSuccess.data.genres}"
+                )
+            )
         ),
-        scrollThreshold = 80
+        scrollThreshold = 5
     )
 
     companion object {

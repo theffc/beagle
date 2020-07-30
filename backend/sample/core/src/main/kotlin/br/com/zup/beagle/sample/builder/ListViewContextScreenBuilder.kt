@@ -58,31 +58,45 @@ object ListViewContextScreenBuilder : ScreenBuilder {
     private val listMovies = ListView(
         context = ContextData(
             id = "movieContext",
-            value =
-            listOf(
-                Movie(
-                    poster_path = "",
-                    original_title = "",
-                    backdrop_path = ""
+            value = mapOf(
+                "currentPage" to 0,
+                "movies" to listOf(
+                    Movie(
+                        poster_path = "",
+                        original_title = "",
+                        backdrop_path = ""
+                    )
                 )
-            )
-        ),
+            )),
         onInit = SendRequest(
             url = "https://api.themoviedb.org/3/discover/movie?api_key=d272326e467344029e68e3c4ff0b4059&with_genres=28",
             method = RequestActionMethod.GET,
             onSuccess = listOf(
                 SetContext(
                     contextId = "movieContext",
-                    value = "@{onSuccess.data.results}"
+                    value = "@{onSuccess.data.results}",
+                    path = "movies"
                 )
             )
         ),
-        dataSource = expressionOf("@{movieContext}"),
+        dataSource = expressionOf("@{movieContext.movies}"),
         direction = ListDirection.HORIZONTAL,
-        template = Text(text = "@{item.original_title}").applyStyle(Style(size = Size(width = 150.unitReal(),height = 50.unitReal()))),
+        template = Text(text = "@{item.original_title}"),
         onScrollEnd = SendRequest(
-            url = "https://api.themoviedb.org/3/discover/movie?api_key=d272326e467344029e68e3c4ff0b4059&with_genres=28",
-            method = RequestActionMethod.GET
+            url = "https://api.themoviedb.org/3/discover/movie?api_key=d272326e467344029e68e3c4ff0b4059&with_genres=28}",
+            method = RequestActionMethod.GET,
+            onSuccess = listOf(
+                SetContext(
+                    contextId = "movieContext",
+                    path = "movies",
+                    value = "@{onSuccess.data.results}"
+                ),
+                SetContext(
+                    contextId = "movieContext",
+                    path = "currentPage",
+                    value = "@{onSuccess.data.total_pages}"
+                )
+            )
         ),
         scrollThreshold = 80
     )
@@ -112,13 +126,9 @@ object ListViewContextScreenBuilder : ScreenBuilder {
         direction = ListDirection.VERTICAL,
         template = Container(
             listOf(
+                Text(text = "@{item.name}"),
                 listMovies
             )
-        ).applyStyle(Style(size = Size(width = 100.unitPercent(),height = 100.unitReal()))),
-        onScrollEnd = SendRequest(
-            url = "https://api.themoviedb.org/3/genre/movie/list?api_key=d272326e467344029e68e3c4ff0b4059",
-            method = RequestActionMethod.GET
-        ),
-        scrollThreshold = 80
+        ).applyStyle(Style(size = Size(width = 100.unitPercent(), height = 100.unitReal())))
     )
 }
