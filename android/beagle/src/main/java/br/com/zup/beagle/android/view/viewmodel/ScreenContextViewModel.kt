@@ -70,6 +70,11 @@ internal class ScreenContextViewModel(
 
     fun discoverAllContexts() {
         contextDataManager.discoverAllContexts()
+        contextDataManager.evaluateContexts()
+    }
+
+    fun test(){
+        contextDataManager.discoverAllContexts()
     }
 
     fun discoverAndEvaluateAllContexts() {

@@ -16,13 +16,8 @@
 
 package br.com.zup.beagle.android.components
 
-import android.os.Handler
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
-import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import br.com.zup.beagle.android.action.Action
@@ -40,6 +35,7 @@ import br.com.zup.beagle.android.widget.WidgetView
 import br.com.zup.beagle.annotation.RegisterWidget
 import br.com.zup.beagle.core.ServerDrivenComponent
 import br.com.zup.beagle.widget.core.ListDirection
+import java.util.concurrent.atomic.AtomicBoolean
 
 
 @RegisterWidget
@@ -59,34 +55,51 @@ internal class ListViewTwo(
     @Transient
     private lateinit var contextAdapter: ListViewContextAdapter2
 
-    private var list: List<Any> = emptyList()
+    @Transient
+    private val needToAppendList: AtomicBoolean = AtomicBoolean(false)
+
 
     override fun buildView(rootView: RootView): View {
         val recyclerView = viewFactory.makeRecyclerView(rootView.getContext())
         onInit?.execute(rootView, recyclerView)
         val orientation = toRecyclerViewOrientation()
+        contextAdapter = ListViewContextAdapter2(template, viewFactory, orientation, rootView)
         recyclerView.apply {
-            dataSource?.let {
-                observeBindChanges(rootView, recyclerView, it) { value ->
-                    value?.let {
-                        when {
-                            value != list -> {
-                                contextAdapter = ListViewContextAdapter2(template, viewFactory, orientation, rootView)
-                                list = value
-                                contextAdapter.setList(list)
-                                adapter = contextAdapter
-                            }
-                        }
-
+            adapter = contextAdapter
+            layoutManager = LinearLayoutManager(context, orientation, false)
+        }
+        dataSource?.let {
+            observeBindChanges(rootView, recyclerView, it) { value ->
+                value?.let {
+                    if (needToAppendList.get()) {
+                        contextAdapter.addList(value)
+                        needToAppendList.set(false)
+                    } else {
+                        contextAdapter.setList(value)
                     }
                 }
             }
-            layoutManager = LinearLayoutManager(context, orientation, false)
         }
-
-        recyclerView.viewTreeObserver.addOnGlobalLayoutListener {
-
-        }
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                val layoutManager = LinearLayoutManager::class.java.cast(recyclerView.layoutManager)
+                layoutManager?.let {
+                    val totalItemCount = it.itemCount
+                    val lastVisible = it.findLastVisibleItemPosition()
+                    var isScrollEnded = false
+                    if (scrollThreshold == null)
+                        isScrollEnded = !recyclerView.canScrollVertically(toRecyclerViewOrientation())
+                    scrollThreshold?.let { int ->
+                        isScrollEnded = (lastVisible.toFloat() / totalItemCount.toFloat()) * 100 >= int.toFloat()
+                    }
+                    if (isScrollEnded) {
+                        needToAppendList.set(true)
+                        onScrollEnd?.execute(rootView, recyclerView)
+                    }
+                }
+            }
+        })
 
         return recyclerView
     }
@@ -107,7 +120,7 @@ internal class ListViewContextAdapter2(
     private val rootView: RootView
 ) : RecyclerView.Adapter<ContextViewHolderTwo>() {
 
-    private var listItems: List<Any>
+    private var listItems: ArrayList<Any>
 
     init {
         listItems = ArrayList()
@@ -126,7 +139,7 @@ internal class ListViewContextAdapter2(
         val templateClone = template
         view.addServerDrivenComponent(templateClone, rootView)
         view.setContextData(ContextData("item", listItems[position]))
-        rootView.generateViewModelInstance<ScreenContextViewModel>().discoverAllContexts()
+        rootView.generateViewModelInstance<ScreenContextViewModel>().test()
         return ContextViewHolderTwo(view)
     }
 
@@ -140,8 +153,14 @@ internal class ListViewContextAdapter2(
     }
 
     fun setList(list: List<Any>) {
-        this.listItems = list
+        this.listItems = ArrayList(list)
         notifyDataSetChanged()
+    }
+
+    fun addList(list: List<Any>) {
+        val initialSize = listItems.size
+        listItems.addAll(list)
+        notifyItemRangeInserted(initialSize, list.size)
     }
 
     override fun getItemCount(): Int = listItems.size
