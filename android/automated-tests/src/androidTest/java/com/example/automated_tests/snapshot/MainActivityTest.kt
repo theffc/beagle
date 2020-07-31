@@ -25,7 +25,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
-class MainActivityTest: TestRunner() {
+class MainActivityTest {
 
     @Rule
     @JvmField
@@ -35,8 +35,10 @@ class MainActivityTest: TestRunner() {
     fun testSnapshot() {
         rule.launchActivity(Intent())
 
+
         Screenshot.snapActivity(rule.activity)
             .record()
+
 
     }
 }

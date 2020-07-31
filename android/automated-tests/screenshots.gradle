@@ -33,6 +33,7 @@ ext {
 }
 
 shot {
+    appId = 'com.example.automated_tests'
     runInstrumentation = Boolean.valueOf(getArgument("runInstrumentation", "true"))
 }
 

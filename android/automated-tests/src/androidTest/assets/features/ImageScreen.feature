@@ -1,15 +1,15 @@
 @image @regression
 Feature: Image Component Validation
 
-    As a Beagle developer/user
-    I'd like to make sure my image component works as expected
-    In order to guarantee that my application never fails
-
-    Background:
-        Given that I'm on the image screen
-
-    Scenario: Image 01 - Image component renders text attribute correctly
-        Then image screen should render all text attributes correctly
+#    As a Beagle developer/user
+#    I'd like to make sure my image component works as expected
+#    In order to guarantee that my application never fails
+#
+#    Background:
+#        Given that I'm on the image screen
+#
+#    Scenario: Image 01 - Image component renders text attribute correctly
+#        Then image screen should render all text attributes correctly
 
 
 # Snapshot Test

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.automated_tests.snapshot
+package com.example.automated_tests
 
 import android.os.Bundle
 import androidx.test.runner.AndroidJUnitRunner
