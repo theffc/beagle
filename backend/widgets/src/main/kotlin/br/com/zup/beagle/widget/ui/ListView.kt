@@ -42,11 +42,11 @@ data class ListView(
     val template: ServerDrivenComponent? = null,
     val onScrollEnd: Action? = null,
     val scrollThreshold: Int? = null
-) : ServerDrivenComponent, ContextComponent {
+) : Widget(), ContextComponent {
 
     companion object {}
 
-
+    @Deprecated(message = "", replaceWith = ReplaceWith("")) //TODO(put message here, implement replaceWith)
     constructor(
         children: List<ServerDrivenComponent>,
         direction: ListDirection
@@ -59,7 +59,7 @@ data class ListView(
     constructor(
         context: ContextData? = null,
         onInit: Action? = null,
-        dataSource: Bind<List<Any>>? = null,
+        dataSource: Bind<List<Any>>,
         direction: ListDirection,
         template: ServerDrivenComponent,
         onScrollEnd: Action? = null,
@@ -74,5 +74,4 @@ data class ListView(
         onScrollEnd = onScrollEnd,
         scrollThreshold = scrollThreshold
     )
-
 }
