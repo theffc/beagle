@@ -16,13 +16,13 @@
 
 package br.com.zup.beagle.sample.micronaut.service
 
-import br.com.zup.beagle.sample.builder.ListViewContextScreenBuilder
 import br.com.zup.beagle.sample.builder.ListViewScreenBuilder
+import br.com.zup.beagle.sample.builder.ListViewWithoutServiceBuilder
 import javax.inject.Singleton
 
 @Singleton
 class SampleListViewService {
     fun createListView() = ListViewScreenBuilder
 
-    fun createListViewContext() = ListViewContextScreenBuilder
+    fun createListViewContext() = ListViewWithoutServiceBuilder
 }

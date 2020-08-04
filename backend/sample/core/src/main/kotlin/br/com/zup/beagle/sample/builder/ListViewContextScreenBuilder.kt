@@ -100,27 +100,64 @@ object ListViewContextScreenBuilder : ScreenBuilder {
             id = "initialContext",
             value =
             listOf(
-                Genre(
-                    id = 0,
-                    name = ""
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora",
+                    "fora"
                 )
-            )
-        ),
-        onInit = SendRequest(
-            url = "https://api.themoviedb.org/3/genre/movie/list?api_key=d272326e467344029e68e3c4ff0b4059",
-            method = RequestActionMethod.GET,
-            onSuccess = listOf(
-                SetContext(
-                    contextId = "initialContext",
-                    value = "@{onSuccess.data.genres}"
-                )
-            )
         ),
         dataSource = expressionOf("@{initialContext}"),
         direction = ListDirection.VERTICAL,
         template = Container(
             listOf(
-                Text(text = "@{item.name}"),
+                Text(text = "@{item}"),
                 listMovies.applyStyle(Style(backgroundColor = RED_ORANGE))
             )
         ).applyStyle(Style(backgroundColor = CYAN_GREEN, size = Size(width = 100.unitPercent(), height = 50.unitReal()))
