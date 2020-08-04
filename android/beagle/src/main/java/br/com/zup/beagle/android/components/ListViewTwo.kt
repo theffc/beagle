@@ -67,7 +67,7 @@ internal class ListViewTwo(
         contextAdapter = ListViewContextAdapter2(template, viewFactory, orientation, rootView)
         recyclerView.apply {
             adapter = contextAdapter
-            layoutManager = CustomLinearLayoutManager(context, orientation, false)
+            layoutManager = LinearLayoutManager(context, orientation, false)
         }
         dataSource?.let {
             observeBindChanges(rootView, recyclerView, it) { value ->
@@ -134,7 +134,7 @@ internal class ListViewContextAdapter2(
         val templateClone = template
         view.addServerDrivenComponent(templateClone, rootView)
         view.setContextData(ContextData("item", listItems[position]))
-        rootView.generateViewModelInstance<ScreenContextViewModel>().test()
+        rootView.generateViewModelInstance<ScreenContextViewModel>().discoverAllContexts()
         return ContextViewHolderTwo(view)
     }
 
@@ -150,12 +150,6 @@ internal class ListViewContextAdapter2(
     fun setList(list: List<Any>) {
         this.listItems = ArrayList(list)
         notifyDataSetChanged()
-    }
-
-    fun addList(list: List<Any>) {
-        val initialSize = listItems.size
-        listItems.addAll(list)
-        notifyItemRangeInserted(initialSize, list.size)
     }
 
     override fun getItemCount(): Int = listItems.size
