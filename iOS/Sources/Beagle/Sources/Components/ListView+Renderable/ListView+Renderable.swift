@@ -33,24 +33,30 @@ extension ListView.Direction {
 extension ListView: ServerDrivenComponent {
 
     public func toView(renderer: BeagleRenderer) -> UIView {
-        let componentViews: [(view: UIView, size: CGSize)] = children.compactMap {
-            let container = Container(children: [$0], widgetProperties: .init(style: .init(positionType: .absolute)))
-            let containerView = renderer.render(container)
-            let view = UIView()
-            view.addSubview(containerView)
-            view.style.applyLayout()
-            if let view = containerView.subviews.first {
-                view.removeFromSuperview()
-                return (view: view, size: view.bounds.size)
-            }
-            return nil
+        guard let widget = template as? RawWidget else {
+            return UIView()
         }
+        let template = widget
         
-        let model = ListViewUIComponent.Model(
-            component: self,
-            componentViews: componentViews
+        let view = ListViewUIComponent(
+            model: ListViewUIComponent.Model(
+                listViewItems: nil,
+                direction: direction?.toUIKit() ?? .vertical,
+                template: template,
+                onScrollEnd: onScrollEnd,
+                scrollThreshold: scrollThreshold
+            ),
+            renderer: renderer
         )
         
-        return ListViewUIComponent(model: model)
+        renderer.controller.execute(actions: [onInit], origin: view)
+        renderer.observe(dataSource, andUpdateManyIn: view) {
+            if let listItems = $0 {
+                view.setListViewItems(listViewItems: listItems)
+            }
+        }
+        view.style.setup(widgetProperties.style)
+        return view
     }
+    
 }

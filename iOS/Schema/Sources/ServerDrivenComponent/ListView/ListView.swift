@@ -14,38 +14,38 @@
  * limitations under the License.
  */
 
-public struct ListView: RawComponent, AutoInitiableAndDecodable {
+public struct ListView: RawWidget, HasContext, AutoInitiableAndDecodable {
     
-    // MARK: - Public Properties
+    public var context: Context?
+    public let onInit: RawAction
+    public let dataSource: Expression<[DynamicObject]>
+    public let direction: Direction?
+    public let template: RawComponent
+    public let onScrollEnd: RawAction?
+    public let scrollThreshold: Int?
+    public var widgetProperties: WidgetProperties
     
-    public let children: [RawComponent]
-    public var direction: Direction = .vertical
-
 // sourcery:inline:auto:ListView.Init
     public init(
-        children: [RawComponent],
-        direction: Direction = .vertical
+        context: Context? = nil,
+        onInit: RawAction,
+        dataSource: Expression<[DynamicObject]>,
+        direction: Direction? = nil,
+        template: RawComponent,
+        onScrollEnd: RawAction? = nil,
+        scrollThreshold: Int? = nil,
+        widgetProperties: WidgetProperties = WidgetProperties()
     ) {
-        self.children = children
+        self.context = context
+        self.onInit = onInit
+        self.dataSource = dataSource
         self.direction = direction
+        self.template = template
+        self.onScrollEnd = onScrollEnd
+        self.scrollThreshold = scrollThreshold
+        self.widgetProperties = widgetProperties
     }
 // sourcery:end
-    
-    public init(
-        direction: Direction = .vertical,
-        @ChildBuilder
-        _ children: () -> RawComponent
-    ) {
-        self.init(children: [children()], direction: direction)
-    }
-    
-    public init(
-        direction: Direction = .vertical,
-        @ChildrenBuilder
-        _ children: () -> [RawComponent]
-    ) {
-        self.init(children: children(), direction: direction)
-    }
 }
 
 extension ListView {

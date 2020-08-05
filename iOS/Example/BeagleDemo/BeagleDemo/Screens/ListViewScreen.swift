@@ -34,39 +34,51 @@ struct ListViewScreen: DeeplinkScreen {
         )
     }
     
-    var listView = ListView(direction: .horizontal) {
-        Touchable(onPress: [Navigate.pushView(.remote(.init(url: .TEXT_LAZY_COMPONENTS_ENDPOINT)))]) {
-            Text("0000")
-        }
-        Text("0001", widgetProperties: .init(style: Style(size: Size().width(100).height(100))))
-        Text("0002")
-        Text("0003")
-        Text("0004")
-        LazyComponent(
-            path: .TEXT_LAZY_COMPONENTS_ENDPOINT,
-            initialState: Text("Loading LazyComponent...")
+    var listView = ListView(
+        context: Context(
+            id: "initialContext",
+            value: ""
+        ),
+        onInit: SendRequest(
+            url: "https://api.themoviedb.org/3/genre/movie/list?api_key=02a08061d7eead16928726e26cb3203c&language=en-US",
+            method: .get,
+            onSuccess: [
+                SetContext(
+                    contextId: "initialContext",
+                    value: "@{onSuccess.data.genres}"
+                )
+            ]
+        ),
+        dataSource: Expression("@{initialContext}"),
+        direction: .horizontal,
+        template: Container(
+            children: [
+                Text(
+                    "@{item.name}"
+                ),
+                Image(
+                    .value(.local("imageBeagle")),
+                    widgetProperties: WidgetProperties(
+                        style: Style(
+                            size: Size().width(150).height(50)
+                        )
+                    )
+                )
+            ],
+            widgetProperties: WidgetProperties(
+                style: Style(
+                    backgroundColor: "#0f4c75"
+//                    size: Size().width(50%).height(100)
+                )
+            )
+        ),
+        onScrollEnd: SendRequest(url: ""),
+        scrollThreshold: 80,
+        widgetProperties: WidgetProperties(
+            style: Style(
+                backgroundColor: "#cedebd",
+                size: Size().width(100%).height(100%)
+            )
         )
-        Text("0005")
-        Text("0006")
-        Text("0007")
-        Text("0008")
-        Text("0009")
-        Text("0010")
-        Text("0011")
-        Text("0012")
-        Text("0013")
-        Image(.value(.local("beagle")))
-        Text("0014")
-        Text("0015")
-        Text("0016")
-        Image(.value(.remote(.init(url: .NETWORK_IMAGE_BEAGLE))))
-        Text("0017")
-        Text("0018")
-        Text("0019")
-        Text("0020")
-        Container {
-            Text("Text1")
-            Text("Text2")
-        }
-    }
+    )
 }

@@ -17,14 +17,27 @@
 import UIKit
 
 /// Defines a container that holds a listview item
-final class ListItemCollectionViewCell: UICollectionViewCell {
-
-    /// Sets up with the ComponentView
-    /// - Parameter componentView: some componentView
-    func setup(with componentView: UIView) {
-        componentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        componentView.frame = contentView.bounds
-        contentView.addSubview(componentView)
+final class ListViewCell: UICollectionViewCell {
+    
+    weak var controller: BeagleScreenViewController?
+    var templateView: UIView?
+    var isHeightCalculated: Bool = false
+    
+    func setupCell(templateView: UIView) {
+        self.templateView = templateView
+        contentView.bounds.size = templateView.bounds.size
+        contentView.addSubview(templateView)
+//        templateView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        templateView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor)
+        templateView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor).isActive = true
+        templateView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor).isActive = true
     }
     
+    override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
+        if !isHeightCalculated, let template = templateView {
+            layoutAttributes.size = template.bounds.size
+            isHeightCalculated = true
+        }
+        return layoutAttributes
+    }
 }

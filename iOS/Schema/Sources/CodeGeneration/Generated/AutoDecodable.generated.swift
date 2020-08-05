@@ -214,15 +214,26 @@ extension LazyComponent {
 extension ListView {
 
     enum CodingKeys: String, CodingKey {
-        case children
+        case context
+        case onInit
+        case dataSource
         case direction
+        case template
+        case onScrollEnd
+        case scrollThreshold
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        children = try container.decode(forKey: .children)
-        direction = try container.decode(Direction.self, forKey: .direction)
+        context = try container.decodeIfPresent(Context.self, forKey: .context)
+        onInit = try container.decode(forKey: .onInit)
+        dataSource = try container.decode(Expression<[DynamicObject]>.self, forKey: .dataSource)
+        direction = try container.decodeIfPresent(Direction.self, forKey: .direction)
+        template = try container.decode(forKey: .template)
+        onScrollEnd = try container.decodeIfPresent(forKey: .onScrollEnd)
+        scrollThreshold = try container.decodeIfPresent(Int.self, forKey: .scrollThreshold)
+        widgetProperties = try WidgetProperties(from: decoder)
     }
 }
 
