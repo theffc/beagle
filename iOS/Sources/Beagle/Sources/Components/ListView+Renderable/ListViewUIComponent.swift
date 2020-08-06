@@ -78,37 +78,21 @@ final class ListViewUIComponent: UIView {
         let controller = renderer.controller as? BeagleScreenViewController
         controller?.configBindings()
         let containerView = UIView()
-        let style = Style().positionType(.absolute)
-        view.style.setup(style)
-        containerView.style.setup(style)
+        
+        switch model.direction {
+        case .horizontal:
+            let style = Style().flex(Flex().flexDirection(.row))
+            containerView.style.setup(style)
+        case .vertical:
+            let style = Style().flex(Flex().flexDirection(.column))
+            containerView.style.setup(style)
+        default: ()
+        }
         containerView.frame.size = collectionView.bounds.size
         containerView.addSubview(view)
         containerView.style.applyLayout()
         
-        switch model.direction {
-        case .horizontal:
-            let viewHorizontal = UIView()
-            let size = CGSize(
-                width: view.bounds.size.width,
-                height: collectionView.bounds.size.height
-            )
-            viewHorizontal.bounds.size = size
-            viewHorizontal.addSubview(view)
-            return viewHorizontal
-
-        case .vertical:
-            let viewVertical = UIView()
-            let size = CGSize(
-                width: collectionView.bounds.size.width,
-                height: view.bounds.size.height
-            )
-            viewVertical.bounds.size = size
-            viewVertical.addSubview(view)
-            return viewVertical
-        default: ()
-        }
-        
-       return UIView()
+        return view
         
     }
     
@@ -150,7 +134,7 @@ extension ListViewUIComponent: UICollectionViewDataSource, UICollectionViewDeleg
         
         cell.controller = renderer.controller as? BeagleScreenViewController
         let context = Context(id: "item", value: item)
-        cell.templateView?.subviews[0].setContext(context)
+        cell.templateView?.setContext(context)
         cell.controller?.configBindings()
         
 //        if let templateView = cell.templateView {

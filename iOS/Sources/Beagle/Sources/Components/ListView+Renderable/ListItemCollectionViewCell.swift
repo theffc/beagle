@@ -27,10 +27,10 @@ final class ListViewCell: UICollectionViewCell {
         self.templateView = templateView
         contentView.bounds.size = templateView.bounds.size
         contentView.addSubview(templateView)
-//        templateView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        templateView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor)
-        templateView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor).isActive = true
-        templateView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor).isActive = true
+        templateView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+//        templateView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor)
+//        templateView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor).isActive = true
+//        templateView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor).isActive = true
     }
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {

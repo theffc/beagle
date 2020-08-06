@@ -50,25 +50,22 @@ struct ListViewScreen: DeeplinkScreen {
             ]
         ),
         dataSource: Expression("@{initialContext}"),
-        direction: .horizontal,
+        direction: .vertical,
         template: Container(
             children: [
                 Text(
-                    "@{item.name}"
-                ),
-                Image(
-                    .value(.local("imageBeagle")),
+                    "@{item.name}",
                     widgetProperties: WidgetProperties(
                         style: Style(
-                            size: Size().width(150).height(50)
+                            backgroundColor: "#ffa36c"
                         )
                     )
                 )
             ],
             widgetProperties: WidgetProperties(
                 style: Style(
-                    backgroundColor: "#0f4c75"
-//                    size: Size().width(50%).height(100)
+                    backgroundColor: "#0f4c75",
+                    size: Size().width(200).height(200)
                 )
             )
         ),
