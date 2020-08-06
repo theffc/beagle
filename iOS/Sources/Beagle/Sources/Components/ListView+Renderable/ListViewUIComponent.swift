@@ -71,7 +71,7 @@ final class ListViewUIComponent: UIView {
         self.collectionView.reloadData()
     }
     
-    private func setupCell(_ item: DynamicObject) -> UIView {
+    private func setupCreateCell(_ item: DynamicObject) -> UIView {
         let view = renderer.render(model.template)
         let context = Context(id: "item", value: item)
         view.setContext(context)
@@ -129,7 +129,11 @@ extension ListViewUIComponent: UICollectionViewDataSource, UICollectionViewDeleg
         }
         
         if cell.templateView == nil {
-            cell.setupCell(templateView: self.setupCell(item))
+            cell.setupCell(
+                templateView: self.setupCreateCell(item),
+                sizeCollection: collectionView.frame.size,
+                direction: model.direction
+            )
         }
         
         cell.controller = renderer.controller as? BeagleScreenViewController
@@ -141,7 +145,6 @@ extension ListViewUIComponent: UICollectionViewDataSource, UICollectionViewDeleg
 //            let expression: Expression<DynamicObject> = "@{item}"
 //            renderer.observe(expression, andUpdateManyIn: templateView) { [weak self] _ in
 //                self?.updateCell(indexPath: indexPath)
-//                self?.number = indexPath.row
 //            }
 //        }
         

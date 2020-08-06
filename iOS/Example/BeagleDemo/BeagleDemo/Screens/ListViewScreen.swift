@@ -64,8 +64,8 @@ struct ListViewScreen: DeeplinkScreen {
             ],
             widgetProperties: WidgetProperties(
                 style: Style(
-                    backgroundColor: "#0f4c75",
-                    size: Size().width(200).height(200)
+                    backgroundColor: "#0f4c75"
+//                    size: Size().width(300).height(500)
                 )
             )
         ),
@@ -74,7 +74,7 @@ struct ListViewScreen: DeeplinkScreen {
         widgetProperties: WidgetProperties(
             style: Style(
                 backgroundColor: "#cedebd",
-                size: Size().width(100%).height(100%)
+                size: Size().width(100%).height(50)
             )
         )
     )

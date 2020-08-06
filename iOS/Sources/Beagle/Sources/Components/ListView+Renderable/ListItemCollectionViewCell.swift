@@ -21,22 +21,28 @@ final class ListViewCell: UICollectionViewCell {
     
     weak var controller: BeagleScreenViewController?
     var templateView: UIView?
-    var isHeightCalculated: Bool = false
+    var sizeCollection: CGSize?
+    var direction: UICollectionView.ScrollDirection?
+    var isSizeCalculated: Bool = false
     
-    func setupCell(templateView: UIView) {
+    func setupCell(templateView: UIView, sizeCollection: CGSize, direction: UICollectionView.ScrollDirection) {
         self.templateView = templateView
-        contentView.bounds.size = templateView.bounds.size
+        self.direction = direction
+        self.sizeCollection = sizeCollection
         contentView.addSubview(templateView)
-        templateView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-//        templateView.anchor(top: contentView.topAnchor, left: contentView.leftAnchor)
-//        templateView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor).isActive = true
-//        templateView.rightAnchor.constraint(lessThanOrEqualTo: contentView.rightAnchor).isActive = true
     }
     
     override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-        if !isHeightCalculated, let template = templateView {
-            layoutAttributes.size = template.bounds.size
-            isHeightCalculated = true
+        if !isSizeCalculated, let template = templateView, let sizeCollection = sizeCollection {
+            var size = sizeCollection
+            switch direction {
+            case .horizontal:
+                size.width = template.frame.size.width
+            case .vertical:
+                size.height = template.frame.size.height
+            default: ()
+            }
+            layoutAttributes.size = size
         }
         return layoutAttributes
     }
