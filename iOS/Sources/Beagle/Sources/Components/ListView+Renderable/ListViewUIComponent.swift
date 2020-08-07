@@ -108,7 +108,7 @@ extension ListViewUIComponent {
         var listViewItems: [DynamicObject]?
         var direction: UICollectionView.ScrollDirection
         var template: RawWidget
-        var onScrollEnd: RawAction?
+        var onScrollEnd: [RawAction]?
         var scrollThreshold: Int?
     }
 }
@@ -171,7 +171,7 @@ extension ListViewUIComponent: UICollectionViewDataSource, UICollectionViewDeleg
         let valuePercent = numberOfItems * scrollThreshold
         
         if Float(index) >= valuePercent {
-            renderer.controller.execute(actions: [action], origin: self)
+            renderer.controller.execute(actions: action, origin: self)
             validationSetOnScrollEnd = false
         }
     }

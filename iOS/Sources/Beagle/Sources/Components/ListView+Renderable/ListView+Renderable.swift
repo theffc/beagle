@@ -33,10 +33,9 @@ extension ListView.Direction {
 extension ListView: ServerDrivenComponent {
 
     public func toView(renderer: BeagleRenderer) -> UIView {
-        guard let widget = template as? RawWidget else {
+        guard let template = template as? RawWidget else {
             return UIView()
         }
-        let template = widget
         
         let view = ListViewUIComponent(
             model: ListViewUIComponent.Model(
@@ -49,7 +48,7 @@ extension ListView: ServerDrivenComponent {
             renderer: renderer
         )
         
-        renderer.controller.execute(actions: [onInit], origin: view)
+        renderer.controller.execute(actions: onInit, origin: view)
         renderer.observe(dataSource, andUpdateManyIn: view) {
             if let listItems = $0 {
                 view.setListViewItems(listViewItems: listItems)
@@ -58,5 +57,4 @@ extension ListView: ServerDrivenComponent {
         view.style.setup(widgetProperties.style)
         return view
     }
-    
 }

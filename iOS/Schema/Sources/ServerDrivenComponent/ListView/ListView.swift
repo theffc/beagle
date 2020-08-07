@@ -17,22 +17,22 @@
 public struct ListView: RawWidget, HasContext, AutoInitiableAndDecodable {
     
     public var context: Context?
-    public let onInit: RawAction
+    public let onInit: [RawAction]
     public let dataSource: Expression<[DynamicObject]>
     public let direction: Direction?
     public let template: RawComponent
-    public let onScrollEnd: RawAction?
+    public let onScrollEnd: [RawAction]?
     public let scrollThreshold: Int?
     public var widgetProperties: WidgetProperties
     
 // sourcery:inline:auto:ListView.Init
     public init(
         context: Context? = nil,
-        onInit: RawAction,
+        onInit: [RawAction],
         dataSource: Expression<[DynamicObject]>,
         direction: Direction? = nil,
         template: RawComponent,
-        onScrollEnd: RawAction? = nil,
+        onScrollEnd: [RawAction]? = nil,
         scrollThreshold: Int? = nil,
         widgetProperties: WidgetProperties = WidgetProperties()
     ) {

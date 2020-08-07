@@ -30,16 +30,34 @@ struct ListViewScreen: DeeplinkScreen {
     var screen: Screen {
         return Screen(
             navigationBar: NavigationBar(title: "ListView"),
-            child: listView
+            child: Container(
+                children: [
+                    listView
+                ],
+                widgetProperties: WidgetProperties(
+                    style: Style(
+                        flex: Flex().grow(1)
+                    )
+                )
+            )
         )
     }
+    
+    var image = Image(
+        .value(.local("imageBeagle")),
+        widgetProperties: WidgetProperties(
+            style: Style(
+                size: Size().width(100).height(100)
+            )
+        )
+    )
     
     var listView = ListView(
         context: Context(
             id: "initialContext",
             value: ""
         ),
-        onInit: SendRequest(
+        onInit: [SendRequest(
             url: "https://api.themoviedb.org/3/genre/movie/list?api_key=02a08061d7eead16928726e26cb3203c&language=en-US",
             method: .get,
             onSuccess: [
@@ -48,9 +66,9 @@ struct ListViewScreen: DeeplinkScreen {
                     value: "@{onSuccess.data.genres}"
                 )
             ]
-        ),
+        )],
         dataSource: Expression("@{initialContext}"),
-        direction: .vertical,
+        direction: .horizontal,
         template: Container(
             children: [
                 Text(
@@ -65,16 +83,15 @@ struct ListViewScreen: DeeplinkScreen {
             widgetProperties: WidgetProperties(
                 style: Style(
                     backgroundColor: "#0f4c75"
-//                    size: Size().width(300).height(500)
                 )
             )
         ),
-        onScrollEnd: SendRequest(url: ""),
+        onScrollEnd: [SendRequest(url: "")],
         scrollThreshold: 80,
         widgetProperties: WidgetProperties(
             style: Style(
                 backgroundColor: "#cedebd",
-                size: Size().width(100%).height(50)
+                flex: Flex().grow(1)
             )
         )
     )
