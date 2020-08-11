@@ -16,6 +16,7 @@
 
 package br.com.zup.beagle.android.setup
 
+import androidx.annotation.AnimRes
 import androidx.annotation.DrawableRes
 import androidx.annotation.StyleRes
 
@@ -32,4 +33,6 @@ open class DesignSystem {
     open fun toolbarStyle(id: String): Int? = null
     @StyleRes
     open fun tabViewStyle(id: String): Int? = null
+    @AnimRes
+    open fun animationSet(id: String): Int? = null
 }

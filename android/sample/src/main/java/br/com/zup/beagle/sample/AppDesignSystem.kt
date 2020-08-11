@@ -75,4 +75,14 @@ class AppDesignSystem : DesignSystem() {
             else -> android.R.style.Widget_Button
         }
     }
+
+    override fun animationSet(id: String): Int? {
+        return when (id){
+            "fade_in" -> android.R.anim.fade_in
+            "fade_out" -> android.R.anim.fade_out
+            "slide_in_left" -> android.R.anim.slide_in_left
+            "slide_out_right" -> android.R.anim.slide_out_right
+            else -> br.com.zup.beagle.R.anim.none_animation
+        }
+    }
 }

@@ -72,7 +72,8 @@ class NavigationFragment : Fragment() {
                 child = Button(text = "Click to navigate").applyStyle(
                     Style(size = Size(width = UnitValue(80.0, UnitType.PERCENT)))
                 ),
-                onPress = listOf(Navigate.PushView(Route.Remote("https://t001-2751a.firebaseapp.com/flow/step1.json"))),
+                onPress =
+                listOf(Navigate.PushView(Route.Remote("https://t001-2751a.firebaseapp.com/flow/step1.json"))),
                 clickAnalyticsEvent = ClickEvent(
                     category = "Categoria",
                     label = "Descrição",

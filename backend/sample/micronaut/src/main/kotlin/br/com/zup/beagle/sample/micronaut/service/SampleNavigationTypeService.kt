@@ -35,6 +35,7 @@ import br.com.zup.beagle.sample.constants.RED_ORANGE
 import br.com.zup.beagle.sample.constants.REPRESENTATION_NAVIGATION_TYPE_STEP2_ENDPOINT
 import br.com.zup.beagle.sample.constants.REPRESENTATION_NAVIGATION_TYPE_STEP3_ENDPOINT
 import br.com.zup.beagle.sample.constants.REPRESENTATION_PRESENT_ENDPOINT
+import br.com.zup.beagle.widget.action.ScreenAnimation
 import br.com.zup.beagle.widget.core.EdgeValue
 import br.com.zup.beagle.widget.core.Flex
 import br.com.zup.beagle.widget.layout.Container
@@ -81,7 +82,14 @@ class SampleNavigationTypeService {
                 buttonPopView,
                 createButton(
                     text = "PushView (Step 2)",
-                    navigate = Navigate.PushView(Route.Remote(REPRESENTATION_NAVIGATION_TYPE_STEP2_ENDPOINT)),
+                    navigate = Navigate.PushView(
+                        Route.Remote(REPRESENTATION_NAVIGATION_TYPE_STEP2_ENDPOINT),
+                        ScreenAnimation(
+                            enter = "slide_in_left",
+                            exit = "fade_out",
+                            popEnter = "fade_in",
+                            popExit = "fade_out"
+                        )),
                     backgroundColor = LIGHT_RED
                 )
             )

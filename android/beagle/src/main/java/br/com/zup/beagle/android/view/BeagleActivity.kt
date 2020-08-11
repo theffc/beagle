@@ -55,6 +55,14 @@ data class ScreenRequest(
     val body: String? = null
 ) : Parcelable
 
+@Parcelize
+data class ScreenAnimation(
+    val enter: String? = null,
+    val exit: String? = null,
+    val popEnter: String? = null,
+    val popExit: String? = null
+) : Parcelable
+
 enum class ScreenMethod {
     GET,
     POST,
@@ -158,35 +166,45 @@ abstract class BeagleActivity : AppCompatActivity() {
         }
     }
 
-    fun navigateTo(screenRequest: ScreenRequest, screen: Screen?) {
-        fetch(screenRequest, screen?.toComponent())
+    fun navigateTo(screenRequest: ScreenRequest, screen: Screen?, customAnimation: ScreenAnimation? = null) {
+        fetch(screenRequest, screen?.toComponent(), customAnimation)
     }
 
-    private fun fetch(screenRequest: ScreenRequest, screenComponent: ScreenComponent? = null) {
+    private fun fetch(screenRequest: ScreenRequest,
+                      screenComponent: ScreenComponent? = null,
+                      customAnimation: ScreenAnimation? = null) {
         val liveData = viewModel.fetchComponent(screenRequest, screenComponent)
-        handleLiveData(liveData)
+        handleLiveData(liveData, customAnimation)
     }
 
-    private fun handleLiveData(state: LiveData<ViewState>) {
+    private fun handleLiveData(state: LiveData<ViewState>, customAnimation: ScreenAnimation? = null) {
         state.observe(this, Observer {
             when (it) {
               is ViewState.Error -> onServerDrivenContainerStateChanged(ServerDrivenState.Error(it.throwable,it.retry))
               is ViewState.Loading -> onServerDrivenContainerStateChanged(ServerDrivenState.Loading(it.value))
-              is ViewState.DoRender -> showScreen(it.screenId, it.component)
+              is ViewState.DoRender -> showScreen(it.screenId, it.component, customAnimation)
             }
         })
     }
 
-    private fun showScreen(screenName: String?, component: ServerDrivenComponent) {
+    private fun showScreen(screenName: String?, component: ServerDrivenComponent, customAnimation: ScreenAnimation? = null) {
         val transition = getFragmentTransitionAnimation()
 
         supportFragmentManager
             .beginTransaction()
             .setCustomAnimations(
-                transition.enter,
-                transition.exit,
-                transition.popEnter,
-                transition.popExit
+                customAnimation?.enter?.let {
+                    BeagleEnvironment.beagleSdk.designSystem?.animationSet(it)
+                } ?:  transition.enter,
+                customAnimation?.exit?.let {
+                    BeagleEnvironment.beagleSdk.designSystem?.animationSet(it)
+                } ?:  transition.exit,
+                customAnimation?.popEnter?.let {
+                    BeagleEnvironment.beagleSdk.designSystem?.animationSet(it)
+                } ?:  transition.popEnter,
+                customAnimation?.popExit?.let {
+                    BeagleEnvironment.beagleSdk.designSystem?.animationSet(it)
+                } ?:  transition.popExit
             )
             .replace(getServerDrivenContainerId(), BeagleFragment.newInstance(component))
             .addToBackStack(screenName)

@@ -29,6 +29,7 @@ import br.com.zup.beagle.android.logger.BeagleLoggerFactory
 import br.com.zup.beagle.android.logger.BeagleLoggerProxy
 import br.com.zup.beagle.android.setup.BeagleEnvironment
 import br.com.zup.beagle.android.view.BeagleActivity
+import br.com.zup.beagle.android.view.ScreenAnimation
 import br.com.zup.beagle.android.view.ScreenRequest
 import java.lang.Exception
 
@@ -60,11 +61,11 @@ internal object BeagleNavigator {
         }
     }
 
-    fun pushView(context: Context, route: Route) {
+    fun pushView(context: Context, route: Route, customAnimation: ScreenAnimation? = null) {
         if (context is BeagleActivity) {
             when (route) {
-                is Route.Remote -> context.navigateTo(ScreenRequest(route.url), route.fallback)
-                is Route.Local -> context.navigateTo(ScreenRequest(""), route.screen)
+                is Route.Remote -> context.navigateTo(ScreenRequest(route.url), route.fallback, customAnimation)
+                is Route.Local -> context.navigateTo(ScreenRequest(""), route.screen, customAnimation)
             }
         } else {
             context.startActivity(generateIntent(context, route))

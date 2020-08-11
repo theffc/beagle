@@ -78,7 +78,7 @@ sealed class Navigate : Action {
      * of a new screen using the route passed.
      * This screen will also be stacked at the top of the hierarchy of views in the application flow.
      */
-    data class PushView(val route: Route) : Navigate()
+    data class PushView(val route: Route, val customAnimation: ScreenAnimation? = null) : Navigate()
 
     /**
      * Action that closes the current view.
@@ -103,3 +103,10 @@ sealed class Navigate : Action {
     data class ResetStack(val route: Route) : Navigate()
 
 }
+
+data class ScreenAnimation(
+    val enter: String? = null,
+    val exit: String? = null,
+    val popEnter: String? = null,
+    val popExit: String? = null
+)

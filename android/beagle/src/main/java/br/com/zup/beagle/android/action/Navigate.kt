@@ -18,6 +18,7 @@ package br.com.zup.beagle.android.action
 
 import android.view.View
 import br.com.zup.beagle.android.components.layout.Screen
+import br.com.zup.beagle.android.view.ScreenAnimation
 import br.com.zup.beagle.android.view.custom.BeagleNavigator
 import br.com.zup.beagle.android.widget.RootView
 
@@ -49,9 +50,9 @@ sealed class Navigate : Action {
         }
     }
 
-    data class PushView(val route: Route) : Navigate() {
+    data class PushView(val route: Route, val customAnimation: ScreenAnimation? = null) : Navigate() {
         override fun execute(rootView: RootView, origin: View) {
-            BeagleNavigator.pushView(rootView.getContext(), route)
+            BeagleNavigator.pushView(rootView.getContext(), route, customAnimation)
         }
     }
 
