@@ -93,6 +93,7 @@ flutter/**/**/ios/Flutter/Flutter.podspec
 flutter/**/**/ios/Flutter/Generated.xcconfig
 flutter/**/**/ios/Flutter/app.flx
 flutter/**/**/ios/Flutter/app.zip
+flutter/**/**/ios/Flutter/.last_build_id
 flutter/**/**/ios/Flutter/flutter_assets/
 flutter/**/**/ios/Flutter/flutter_export_environment.sh
 flutter/**/**/ios/ServiceDefinitions.json
