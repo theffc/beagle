@@ -17,15 +17,19 @@
 package br.com.zup.beagle.android.engine.renderer
 
 import android.content.Context
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelStoreOwner
+import br.com.zup.beagle.R
 import br.com.zup.beagle.android.widget.RootView
 
 class FragmentRootView(
     val fragment: Fragment
 ) : RootView {
+    override fun getView(): View? = fragment.view
+
     override fun getContext(): Context = fragment.requireContext()
 
     override fun getLifecycleOwner(): LifecycleOwner = fragment.viewLifecycleOwner
@@ -36,6 +40,8 @@ class FragmentRootView(
 class ActivityRootView(
     val activity: AppCompatActivity
 ) : RootView {
+    override fun getView(): View? = activity.window.findViewById(R.id.content)
+
     override fun getContext(): Context = activity
 
     override fun getLifecycleOwner(): LifecycleOwner = activity

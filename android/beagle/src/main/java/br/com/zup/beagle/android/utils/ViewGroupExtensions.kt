@@ -19,14 +19,19 @@ package br.com.zup.beagle.android.utils
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import br.com.zup.beagle.android.components.utils.viewExtensionsViewFactory
 import br.com.zup.beagle.android.data.serializer.BeagleSerializer
 import br.com.zup.beagle.android.engine.renderer.ActivityRootView
 import br.com.zup.beagle.android.engine.renderer.FragmentRootView
 import br.com.zup.beagle.android.view.BeagleFragment
+import br.com.zup.beagle.android.view.BeagleViewState
 import br.com.zup.beagle.android.view.ScreenRequest
 import br.com.zup.beagle.android.view.custom.OnStateChanged
+import br.com.zup.beagle.android.view.mapper.toBeagleViewState
+import br.com.zup.beagle.android.view.viewmodel.BeagleViewModel
 import br.com.zup.beagle.android.view.viewmodel.ScreenContextViewModel
+import br.com.zup.beagle.android.view.viewmodel.ViewState
 import br.com.zup.beagle.android.widget.RootView
 
 internal var beagleSerializerFactory = BeagleSerializer()
@@ -57,16 +62,26 @@ private fun loadView(
     screenRequest: ScreenRequest,
     listener: OnStateChanged?
 ) {
-    val viewModel = rootView.generateViewModelInstance<ScreenContextViewModel>()
-    viewModel.resetIds()
-    val view = viewExtensionsViewFactory.makeBeagleView(viewGroup.context).apply {
-        stateChangedListener = listener
-        loadView(rootView, screenRequest)
-    }
-    view.loadCompletedListener = {
-        viewGroup.addView(view)
-        viewModel.linkBindingToContextAndEvaluateThem()
-    }
+    val screenContextViewModel = rootView.generateViewModelInstance<ScreenContextViewModel>()
+    screenContextViewModel.resetIds()
+    val beagleViewModel = rootView.generateViewModelInstance<BeagleViewModel>()
+    beagleViewModel.fetchComponent(screenRequest).observe(rootView.getLifecycleOwner(), Observer { state ->
+        if (state is ViewState.DoRender) {
+            val serverDrivenView = viewExtensionsViewFactory.makeBeagleRootView(rootView)
+            serverDrivenView.addServerDrivenComponent(state.component, rootView)
+            viewGroup.removeAllViewsInLayout()
+            viewGroup.addView(serverDrivenView)
+        }
+
+        val beagleViewState = state.toBeagleViewState()
+        if (beagleViewState is BeagleViewState.Started) {
+            listener?.invoke(BeagleViewState.LoadStarted)
+        } else if (beagleViewState is BeagleViewState.Finished) {
+            listener?.invoke(BeagleViewState.LoadFinished)
+        }
+
+        listener?.invoke(state.toBeagleViewState())
+    })
 }
 
 /**
