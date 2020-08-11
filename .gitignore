@@ -42,7 +42,9 @@ build/
 ### Fastane ###
 /fastlane/report.xml
 codecov_reporter.sh
+lcov.info
 fastlane/README.md
+coverage/
 
 ### Jacoco ###
 jacoco.exec
