@@ -42,9 +42,7 @@ build/
 ### Fastane ###
 /fastlane/report.xml
 codecov_reporter.sh
-lcov.info
 fastlane/README.md
-coverage/
 
 ### Jacoco ###
 jacoco.exec
@@ -60,6 +58,8 @@ flutter/**/.pub-cache/
 flutter/**/.pub/
 flutter/**/build/
 flutter_analyze_report.txt
+coverage/
+lcov.info
 
 # Android related
 flutter/**/**/android/**/gradle-wrapper.jar
