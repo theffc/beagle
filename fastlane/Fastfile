@@ -33,9 +33,8 @@ platform :flutter do
 
   desc "Pull Request verification"
   lane :pull_request_verification do
-    sh "cd .."
-    sh "flutter analyze > flutter_analyze_report.txt"
-    sh "fastlane/flutter/tests.sh"
+    sh "flutter analyze > ../flutter_analyze_report.txt"
+    sh "cd .. && fastlane/flutter/tests.sh"
     run_codecov(platform: 'flutter')
   end
 
