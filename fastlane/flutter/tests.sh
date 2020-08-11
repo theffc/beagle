@@ -31,10 +31,7 @@ runTests () {
   local repo_dir=$2
   cd $package_dir;
   if [[ -f "pubspec.yaml" ]] && [[ -d "test" ]]; then
-#    flutter packages get || echo "Ignore exit(1)"
     flutter packages get
-    echo "run analyzer in $1"
-    flutter analyze
     echo "run dartfmt in $1"
     flutter dartfmt -n --set-exit-if-changed ./
     echo "running tests in $1"
