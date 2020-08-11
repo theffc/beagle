@@ -88,8 +88,8 @@ extension UIView {
             closure(context.value)
         case let .value(.literal(literal)):
             completion(transform(literal.evaluate()))
-        case .operation:
-            fatalError("Fix me later")
+        case let .operation(operation):
+            completion(transform(operation.evaluate(in: self)))
         }
     }
     
@@ -102,8 +102,8 @@ extension UIView {
             return transform(dynamicObject)
         case let .value(.literal(literal)):
             return transform(literal.evaluate())
-        case .operation:
-            fatalError("Fix me later")
+        case let .operation(operation):
+            return transform(operation.evaluate(in: self))
         }
     }
     
@@ -195,8 +195,8 @@ extension UIView {
             }
         case let .value(.literal(literal)):
             return transform(literal.evaluate())
-        case .operation:
-            fatalError("Fix me later")
+        case let .operation(operation):
+            return transform(operation.evaluate(in: self))
         }
     }
 }
