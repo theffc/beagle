@@ -14,16 +14,13 @@
  * limitations under the License.
  */
 
-package br.com.zup.beagle.android.widget
+package br.com.zup.beagle.android.view.mapper
 
-import android.content.Context
-import android.view.View
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.ViewModelStoreOwner
+import br.com.zup.beagle.android.view.BeagleViewState
+import br.com.zup.beagle.android.view.viewmodel.ViewState
 
-interface RootView {
-    fun getView(): View?
-    fun getContext(): Context
-    fun getLifecycleOwner(): LifecycleOwner
-    fun getViewModelStoreOwner(): ViewModelStoreOwner
+fun ViewState.toBeagleViewState() = when (this) {
+    is ViewState.Loading -> BeagleViewState.Started
+    is ViewState.Error -> BeagleViewState.Error(this.throwable)
+    is ViewState.DoRender -> BeagleViewState.Finished
 }

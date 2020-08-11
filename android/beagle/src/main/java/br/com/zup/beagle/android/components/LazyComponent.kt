@@ -17,8 +17,19 @@
 package br.com.zup.beagle.android.components
 
 import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.get
+import androidx.lifecycle.Observer
+import br.com.zup.beagle.android.components.utils.viewExtensionsViewFactory
+import br.com.zup.beagle.android.utils.generateViewModelInstance
+import br.com.zup.beagle.android.utils.toView
+import br.com.zup.beagle.android.view.BeagleViewState
+import br.com.zup.beagle.android.view.ScreenRequest
 import br.com.zup.beagle.android.view.ViewFactory
+import br.com.zup.beagle.android.view.custom.BeagleFlexView
+import br.com.zup.beagle.android.view.mapper.toBeagleViewState
+import br.com.zup.beagle.android.view.viewmodel.BeagleViewModel
+import br.com.zup.beagle.android.view.viewmodel.ViewState
 import br.com.zup.beagle.android.widget.RootView
 import br.com.zup.beagle.android.widget.WidgetView
 import br.com.zup.beagle.annotation.RegisterWidget
@@ -34,9 +45,15 @@ data class LazyComponent(
     private val viewFactory: ViewFactory = ViewFactory()
 
     override fun buildView(rootView: RootView): View {
-        return viewFactory.makeBeagleView(rootView.getContext()).apply {
+        val beagleViewModel = rootView.generateViewModelInstance<BeagleViewModel>()
+        return viewFactory.makeBeagleFlexView(rootView.getContext()).apply {
             addServerDrivenComponent(initialState, rootView)
-            updateView(rootView, path, this[0])
+            beagleViewModel.fetchComponent(ScreenRequest(path)).observe(rootView.getLifecycleOwner(), Observer { state ->
+                if (state is ViewState.DoRender) {
+                    removeAllViewsInLayout()
+                    addServerDrivenComponent(state.component, rootView)
+                }
+            })
         }
     }
 }

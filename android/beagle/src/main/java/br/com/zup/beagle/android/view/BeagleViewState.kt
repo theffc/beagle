@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package br.com.zup.beagle.android.interfaces
+package br.com.zup.beagle.android.view
 
-import br.com.zup.beagle.core.ServerDrivenComponent
-
-interface OnStateUpdatable<T : ServerDrivenComponent> {
-    fun onUpdateState(widget: T)
+sealed class BeagleViewState {
+    data class Error(val throwable: Throwable) : BeagleViewState()
+    @Deprecated(message = "Use BeagleViewState.Started instead.")
+    object LoadStarted : BeagleViewState()
+    @Deprecated(message = "Use BeagleViewState.Finished instead.")
+    object LoadFinished : BeagleViewState()
+    object Started : BeagleViewState()
+    object Finished : BeagleViewState()
 }

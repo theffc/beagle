@@ -20,9 +20,9 @@ import android.content.Context
 import android.view.View
 import androidx.lifecycle.Observer
 import br.com.zup.beagle.core.ServerDrivenComponent
-import br.com.zup.beagle.android.interfaces.OnStateUpdatable
 import br.com.zup.beagle.android.utils.generateViewModelInstance
 import br.com.zup.beagle.android.utils.implementsGenericTypeOf
+import br.com.zup.beagle.android.view.BeagleViewState
 import br.com.zup.beagle.android.view.ScreenRequest
 import br.com.zup.beagle.android.view.viewmodel.BeagleViewModel
 import br.com.zup.beagle.android.view.viewmodel.ViewState
@@ -31,12 +31,6 @@ import br.com.zup.beagle.android.widget.RootView
 typealias OnStateChanged = (state: BeagleViewState) -> Unit
 
 typealias OnLoadCompleted = () -> Unit
-
-sealed class BeagleViewState {
-    data class Error(val throwable: Throwable) : BeagleViewState()
-    object LoadStarted : BeagleViewState()
-    object LoadFinished : BeagleViewState()
-}
 
 internal class BeagleView(
     context: Context
@@ -89,12 +83,8 @@ internal class BeagleView(
 
     private fun renderComponent(component: ServerDrivenComponent, view: View? = null) {
         if (view != null) {
-            if (component.implementsGenericTypeOf(OnStateUpdatable::class.java, component::class.java)) {
-                (component as? OnStateUpdatable<ServerDrivenComponent>)?.onUpdateState(component)
-            } else {
-                removeView(view)
-                addServerDrivenComponent(component, rootView)
-            }
+            removeView(view)
+            addServerDrivenComponent(component, rootView)
         } else {
             removeAllViewsInLayout()
             addServerDrivenComponent(component, rootView)
