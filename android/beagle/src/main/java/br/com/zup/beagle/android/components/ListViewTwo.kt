@@ -176,7 +176,7 @@ internal class ListViewContextAdapter2(
         val templateClone = template
         this.addServerDrivenComponent(templateClone, this@ListViewContextAdapter2.rootView)
         this.setContextData(ContextData("item", listItems[position]))
-        this@ListViewContextAdapter2.rootView.generateViewModelInstance<ScreenContextViewModel>().linkBindingToContextAndEvaluateThem()
+        this@ListViewContextAdapter2.rootView.generateViewModelInstance<ScreenContextViewModel>().linkBindingToContext()
     }
 
     override fun onBindViewHolder(holder: ContextViewHolderTwo, position: Int) {

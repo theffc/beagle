@@ -17,6 +17,7 @@
 package br.com.zup.beagle.android.context
 
 import android.view.View
+import android.view.ViewGroup
 import br.com.zup.beagle.android.action.SetContextInternal
 import br.com.zup.beagle.android.logger.BeagleMessageLogs
 import br.com.zup.beagle.android.utils.Observer
