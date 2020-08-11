@@ -1,8 +1,8 @@
 name: beagle
-description: A new Flutter package.
-version: 0.0.1
-author:
-homepage:
+description: Beagle is an open source framework for cross-platform development using the concept of Server-Driven UI.
+version: 1.1.0
+author: Zup
+homepage: https://usebeagle.io/
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
