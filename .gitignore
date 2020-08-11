@@ -59,6 +59,7 @@ flutter/**/.packages
 flutter/**/.pub-cache/
 flutter/**/.pub/
 flutter/**/build/
+flutter_analyze_report.txt
 
 # Android related
 flutter/**/**/android/**/gradle-wrapper.jar
