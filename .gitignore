@@ -68,6 +68,7 @@ flutter/**/**/android/captures/
 flutter/**/**/android/gradlew
 flutter/**/**/android/gradlew.bat
 flutter/**/**/android/local.properties
+flutter/**/**/android/.gitignore
 flutter/**/**/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related
